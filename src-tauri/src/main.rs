@@ -34,15 +34,18 @@ fn main() {
                 let window = app.get_window("main").unwrap();
                 match id.as_str() {
                     "quit" => {
+                        // Exit the application
                         std::process::exit(0);
                     }
                     "hide_show" => {
                         if window.is_visible().unwrap() {
                             window.hide().unwrap();
+                            // Update menu item to "Show"
                             item_handle.set_title("Show").unwrap();
                         } else {
                             window.show().unwrap();
-                            item_handle.set_title("Hide").unwrap();
+                            // Update menu item to "Hide"
+                            item_handle.set_title("Hide").unwrap(); 
                         }
                     }
                     _ => {}
@@ -54,9 +57,13 @@ fn main() {
             tauri::WindowEvent::CloseRequested { api, .. } => {
                 let app_handle = event.window().app_handle();
                 let item_handle = app_handle.tray_handle().get_item("hide_show");
-                item_handle.set_title("Show").unwrap();
-                event.window().hide().unwrap();
-                api.prevent_close();
+                
+                // Update menu item to "Show"
+                item_handle.set_title("Show").unwrap(); 
+                // Hide the window instead of closing it
+                event.window().hide().unwrap(); 
+                // Prevent the default close behavior
+                api.prevent_close(); 
             }
             _ => {}
         })
