@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck List</title>
+    <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="column">
+            <div class="select-all">
+                <input type="checkbox" id="select-all-checkbox">
+                <label for="select-all-checkbox">Select All</label>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="search" placeholder="Search for decks...">
+            </div>
+            <ul class="deck-list" id="deck-list">
+                <!-- Deck items will be dynamically inserted here -->
+            </ul>
+            <button id="navigate-home">Back to Home</button>
+        </div>
+    </div>
+    <script type="module" src="src/deck.ts"></script>
+</body>
+</html>

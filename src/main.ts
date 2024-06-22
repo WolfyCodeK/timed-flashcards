@@ -1,16 +1,21 @@
-// import { createFlashcardList } from './components/flashcard_list';
-// import { Flashcard } from './components/flashcard';
+document.addEventListener('DOMContentLoaded', () => {
+    const saveButton = document.getElementById('save-button') as HTMLButtonElement;
+    const navigateDeckButton = document.getElementById('navigate-deck') as HTMLButtonElement;
 
-// const flashcards: Flashcard[] = [
-//     { id: 1, question: 'What is Tauri?', answer: 'A framework for building tiny, fast binaries for all major desktop platforms' },
-//     { id: 2, question: 'What is TypeScript?', answer: 'A typed superset of JavaScript that compiles to plain JavaScript' },
-//     // Add more flashcards here
-// ];  
+    // Handle save button click
+    saveButton.addEventListener('click', () => {
+        const question = (document.getElementById('question') as HTMLInputElement).value;
+        const answer = (document.getElementById('answer') as HTMLInputElement).value;
+        const category = (document.getElementById('category') as HTMLSelectElement).value;
+        const difficulty = (document.getElementById('difficulty') as HTMLSelectElement).value;
+        const hint = (document.getElementById('hint') as HTMLInputElement).value;
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     const app = document.getElementById('app');
-//     if (app) {
-//         const flashcardList = createFlashcardList(flashcards);
-//         app.appendChild(flashcardList);
-//     }
-// });
+        // Implement saving flashcard logic here
+        console.log('Flashcard saved', { question, answer, category, difficulty, hint });
+    });
+
+    // Handle navigation to deck.html
+    navigateDeckButton.addEventListener('click', () => {
+        window.location.href = 'deck.html';
+    });
+});
