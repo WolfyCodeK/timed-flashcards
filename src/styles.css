@@ -1,62 +1,127 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #36393f; /* Darker background */
+  background-color: #36393f;
   color: #ffffff;
   margin: 0;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
+  width: 80%;
+  max-width: 800px;
   padding: 20px;
+  background-color: #2c2f33;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2em;
 }
 
 .column {
   flex: 1;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.select-all {
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.form-group {
   margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.search-bar input {
+  width: 100%;
+  padding: 10px;
+  background-color: #4f545c;
+  border: 1px solid #282b30;
+  color: #ffffff;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.select-all,
+.search-bar {
+  display: flex;
+  align-items: center;
 }
 
 .select-all input[type="checkbox"] {
   margin-right: 10px;
 }
 
-.search-bar {
-  margin-bottom: 15px;
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
-.search-bar input {
-  width: calc(100% - 20px);
-  padding: 10px;
-  background-color: #4f545c; /* Darker input background */
-  border: 1px solid #282b30;
+button,
+#navigate-home {
+  padding: 10px 20px;
+  background-color: #7289da;
   color: #ffffff;
+  border: none;
   border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+button:hover,
+#navigate-home:hover {
+  background-color: #5f73a1;
 }
 
 .deck-list {
   list-style: none;
   padding: 0;
-  max-height: 400px; /* Maximum height of the list before scrolling */
-  overflow-y: scroll; /* Enable vertical scroll */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  margin: 0;
+  max-height: 400px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .deck-list::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+  display: none;
 }
 
-.deck-list li {
+.deck-list-item {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background-color: transparent; /* Remove individual box background */
+  justify-content: space-between;
+  padding: 15px;
+  background-color: #40444b;
   margin-bottom: 10px;
-  border: 1px solid #555555; /* Outline border */
-  border-radius: 5px; /* Rounded corners */
+  border: 1px solid #555555;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.deck-list-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .deck-checkbox {
@@ -66,7 +131,7 @@ body {
 }
 
 .deck-name {
-  margin-right: 10px;
+  margin-right: auto;
   font-size: 16px;
 }
 
@@ -76,14 +141,5 @@ body {
 }
 
 #navigate-home {
-  padding: 10px 20px;
-  background-color: #7289da; /* Discord-like blue */
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-#navigate-home:hover {
-  background-color: #5f73a1; /* Darker shade on hover */
+  align-self: center;
 }

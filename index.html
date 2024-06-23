@@ -8,43 +8,48 @@
 </head>
 <body>
     <div class="container">
-        <div class="column">
-            <div class="form-group">
-                <label for="question">Question:</label>
-                <input type="text" id="question" name="question">
+        <h1 class="title">Flashcard App</h1>
+        <div class="form-container">
+            <div class="column">
+                <div class="form-group">
+                    <label for="question">Question:</label>
+                    <input type="text" id="question" name="question">
+                </div>
+                <div class="form-group">
+                    <label for="answer">Answer:</label>
+                    <input type="text" id="answer" name="answer">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category">
+                        <option value="math">Math</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                        <option value="geography">Geography</option>
+                        <option value="language">Language</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="answer">Answer:</label>
-                <input type="text" id="answer" name="answer">
-            </div>
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <select id="category" name="category">
-                    <option value="math">Math</option>
-                    <option value="science">Science</option>
-                    <option value="history">History</option>
-                    <option value="geography">Geography</option>
-                    <option value="language">Language</option>
-                </select>
+            <div class="column">
+                <div class="form-group">
+                    <label for="difficulty">Difficulty:</label>
+                    <select id="difficulty" name="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hint">Hint:</label>
+                    <input type="text" id="hint" name="hint">
+                </div>
             </div>
         </div>
-        <div class="column">
-            <div class="form-group">
-                <label for="difficulty">Difficulty:</label>
-                <select id="difficulty" name="difficulty">
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="hint">Hint:</label>
-                <input type="text" id="hint" name="hint">
-            </div>
+        <div class="button-group">
+            <button id="save-button">Save Flashcard</button>
+            <button id="navigate-deck">View Decks</button>
         </div>
     </div>
-    <button id="save-button">Save Flashcard</button>
-    <button id="navigate-deck">View Decks</button>
     <script type="module" src="src/main.ts"></script>
 </body>
 </html>
