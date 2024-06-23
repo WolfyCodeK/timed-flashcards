@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Geography Deck', itemCount: 12 },
         { name: 'Language Deck', itemCount: 6 },
         { name: 'Test1 Deck', itemCount: 15 },
-        { name: 'Test2 Deck', itemCount: 3 }
+        { name: 'Test2 Deck', itemCount: 3 },
+        { name: 'Test3 Deck', itemCount: 3 },
+        { name: 'Test4 Deck', itemCount: 3 }
     ];
 
     const deckList = document.getElementById('deck-list') as HTMLUListElement;
