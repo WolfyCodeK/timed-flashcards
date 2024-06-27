@@ -3,51 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcard App</title>
+    <title>Deck List</title>
     <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Flashcard App</h1>
-        <div class="form-container">
-            <div class="column">
-                <div class="form-group">
-                    <label for="question">Question:</label>
-                    <input type="text" id="question" name="question">
-                </div>
-                <div class="form-group">
-                    <label for="answer">Answer:</label>
-                    <input type="text" id="answer" name="answer">
-                </div>
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select id="category" name="category">
-                        <option value="math">Math</option>
-                        <option value="science">Science</option>
-                        <option value="history">History</option>
-                        <option value="geography">Geography</option>
-                        <option value="language">Language</option>
-                    </select>
-                </div>
+        <h1 class="title">Deck List</h1>
+        <div class="column">
+            <div class="select-all">
+                <input type="checkbox" id="select-all-checkbox">
+                <label for="select-all-checkbox">Select All</label>
             </div>
-            <div class="column">
-                <div class="form-group">
-                    <label for="difficulty">Difficulty:</label>
-                    <select id="difficulty" name="difficulty">
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="hint">Hint:</label>
-                    <input type="text" id="hint" name="hint">
-                </div>
+            <div class="search-bar">
+                <input type="text" id="search" placeholder="Search for decks...">
             </div>
-        </div>
-        <div class="button-group">
-            <button id="save-button">Save Flashcard</button>
-            <button id="navigate-deck">View Decks</button>
+            <ul class="deck-list" id="deck-list">
+                <!-- Deck items will be dynamically inserted here -->
+            </ul>
+            <button id="navigate-home">Back to Home</button>
+            <button id="update-button">Check for Updates</button>
         </div>
     </div>
     <script type="module" src="src/main.ts"></script>
