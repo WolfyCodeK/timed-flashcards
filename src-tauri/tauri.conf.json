@@ -11,23 +11,23 @@
     "version": "0.1.0"
   },
   "tauri": {
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://cdn.crabnebula.app/update/wolfycodek/timed-flashcards/{{target}}-{{arch}}/{{current_version}}"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxQ0U3M0UzNjgwRDc2RkQKUldUOWRnMW80M1BPMFgvcForQ2hzdkl3VXZmUS9tU1FUZW5BR212bXBwdjljSHk2WnJ1Um9ZWmIK"
+    },
     "allowlist": {
       "all": false,
       "shell": {
         "all": false,
         "open": true
-      }
-    },
-    "updater": {
-      "active": true,
-      "endpoints": [
-        "https://api.github.com/repos/WolfyCodeK/timed-flashcards/releases"
-      ],
-      "windows": {
-        "installMode": "passive"
       },
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxQ0U3M0UzNjgwRDc2RkQKUldUOWRnMW80M1BPMFgvcForQ2hzdkl3VXZmUS9tU1FUZW5BR212bXBwdjljSHk2WnJ1Um9ZWmIK"
+      "dialog": {
+        "message": true
+      }
     },
     "systemTray": {
       "iconPath": "icons/icon.png",

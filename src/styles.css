@@ -74,8 +74,7 @@ body {
   margin-top: 20px;
 }
 
-button,
-#navigate-home {
+button {
   padding: 10px 20px;
   background-color: #7289da;
   color: #ffffff;
@@ -85,8 +84,7 @@ button,
   font-size: 1em;
 }
 
-button:hover,
-#navigate-home:hover {
+button:hover {
   background-color: #5f73a1;
 }
 
