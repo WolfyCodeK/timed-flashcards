@@ -47,6 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const decks: { name: string; itemCount: number }[] = [
     { name: "Math Deck", itemCount: 5 },
     { name: "English Deck", itemCount: 10 },
+    { name: "Science Deck", itemCount: 8 },
+    { name: "History Deck", itemCount: 6 },
+    { name: "Geography Deck", itemCount: 7 },
+    { name: "Art Deck", itemCount: 4 },
   ];
 
   const deckList = document.getElementById("deck-list") as HTMLUListElement;
@@ -61,6 +65,28 @@ document.addEventListener("DOMContentLoaded", () => {
     "update-button"
   ) as HTMLButtonElement;
 
+  const checkboxStates = new Map<string, boolean>();
+
+  function updateSelectAllCheckbox() {
+    const checkboxes = document.querySelectorAll(
+      ".deck-checkbox"
+    ) as NodeListOf<HTMLInputElement>;
+    const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
+    selectAllCheckbox.checked = allChecked;
+  }
+
+  function addCheckboxListeners() {
+    const checkboxes = document.querySelectorAll(
+      ".deck-checkbox"
+    ) as NodeListOf<HTMLInputElement>;
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
+        updateSelectAllCheckbox();
+      });
+    });
+  }
+
   function renderDecks(filteredDecks: { name: string; itemCount: number }[]) {
     deckList.innerHTML = "";
 
@@ -71,6 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.className = "deck-checkbox";
+      checkbox.dataset.deckName = deck.name;
+      checkbox.checked = checkboxStates.get(deck.name) || false;
 
       const deckName = document.createElement("span");
       deckName.className = "deck-name";
@@ -85,6 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
       listItem.appendChild(itemCount);
       deckList.appendChild(listItem);
     });
+
+    addCheckboxListeners();
+    updateSelectAllCheckbox();
   }
 
   renderDecks(decks);
@@ -103,6 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ) as NodeListOf<HTMLInputElement>;
     checkboxes.forEach((checkbox) => {
       checkbox.checked = selectAllCheckbox.checked;
+      checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
     });
   });
 
