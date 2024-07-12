@@ -11,13 +11,12 @@ body {
 }
 
 .container {
-  width: 80%;
+  width: 85%;
   max-width: 800px;
   padding: 20px;
-  border-radius: 10px;
-  box-sizing: border-box;
-  height: calc(100vh - 40px);
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
 }
 
 .title {
@@ -31,6 +30,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow: hidden; /* Ensures that it does not influence the buttons */
 }
 
 .form-container {
@@ -74,7 +74,7 @@ body {
 .button-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 20px;  /* Adjust margin as needed */
 }
 
 button {
@@ -92,13 +92,13 @@ button:hover {
 }
 
 .deck-list {
+  flex-grow: 1; /* Allows the deck list to take available space */
   list-style: none;
   padding-top: 2px;
   padding-left: 0px;
   padding-right: 10px;
   margin-bottom: 25px;
   margin-top: 0px;
-  max-height: 250px;
   overflow-y: scroll;
   scrollbar-width: thin;
 }
@@ -145,6 +145,12 @@ button:hover {
 }
 
 .deck-checkbox {
+  margin-right: 10px;
+  width: 15px;
+  height: 15px;
+}
+
+#select-all-checkbox {
   margin-right: 10px;
   width: 15px;
   height: 15px;

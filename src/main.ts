@@ -85,6 +85,20 @@ document.addEventListener("DOMContentLoaded", () => {
         updateSelectAllCheckbox();
       });
     });
+
+    const listItems = document.querySelectorAll(
+      ".deck-list-item"
+    ) as NodeListOf<HTMLLIElement>;
+    listItems.forEach((listItem) => {
+      listItem.addEventListener("click", (event) => {
+        const checkbox = listItem.querySelector(".deck-checkbox") as HTMLInputElement;
+        if (event.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
+          updateSelectAllCheckbox();
+        }
+      });
+    });
   }
 
   function renderDecks(filteredDecks: { name: string; itemCount: number }[]) {
