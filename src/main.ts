@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateButton = document.getElementById(
     "update-button"
   ) as HTMLButtonElement;
+  const contextMenu = document.getElementById("context-menu") as HTMLDivElement;
 
   const checkboxStates = new Map<string, boolean>();
 
@@ -120,27 +121,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const itemCount = document.createElement("span");
       itemCount.className = "deck-item-count";
-      itemCount.textContent = `${deck.itemCount} Items`;
+      itemCount.textContent = `${deck.itemCount} items`;
 
       listItem.appendChild(checkbox);
       listItem.appendChild(deckName);
       listItem.appendChild(itemCount);
+
       deckList.appendChild(listItem);
+
+      listItem.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+        showContextMenu(event, deck.name);
+      });
     });
 
     addCheckboxListeners();
-    updateSelectAllCheckbox();
   }
 
-  renderDecks(decks);
-
-  searchInput.addEventListener("input", () => {
-    const query = searchInput.value.toLowerCase();
+  function filterDecks() {
+    const searchText = searchInput.value.toLowerCase();
     const filteredDecks = decks.filter((deck) =>
-      deck.name.toLowerCase().includes(query)
+      deck.name.toLowerCase().includes(searchText)
     );
     renderDecks(filteredDecks);
+  }
+
+  function showContextMenu(event: MouseEvent, deckName: string) {
+    contextMenu.style.display = "block";
+    contextMenu.style.left = `${event.pageX}px`;
+    contextMenu.style.top = `${event.pageY}px`;
+
+    const editOption = document.createElement("div");
+    editOption.className = "context-menu-item";
+    editOption.textContent = "Edit";
+    editOption.addEventListener("click", () => {
+      console.log(`Edit ${deckName}`);
+      contextMenu.style.display = "none";
+    });
+
+    const deleteOption = document.createElement("div");
+    deleteOption.className = "context-menu-item";
+    deleteOption.textContent = "Delete";
+    deleteOption.addEventListener("click", () => {
+      console.log(`Delete ${deckName}`);
+      contextMenu.style.display = "none";
+    });
+
+    contextMenu.innerHTML = "";
+    contextMenu.appendChild(editOption);
+    contextMenu.appendChild(deleteOption);
+  }
+
+  document.addEventListener("click", () => {
+    contextMenu.style.display = "none";
   });
+
+  // Prevent the default context menu from appearing
+  document.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
+
+  searchInput.addEventListener("input", filterDecks);
 
   selectAllCheckbox.addEventListener("change", () => {
     const checkboxes = document.querySelectorAll(
@@ -152,13 +193,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle navigation to index.html
   navigateHomeButton.addEventListener("click", () => {
-    window.location.href = "deck.html";
+    window.location.href = "index.html";
   });
 
-  // Check for updates when the update button is clicked
   updateButton.addEventListener("click", () => {
     checkForUpdates();
   });
+
+  renderDecks(decks);
 });
