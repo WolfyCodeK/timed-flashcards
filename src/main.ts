@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   navigateHomeButton.addEventListener("click", () => {
-    window.location.href = "index.html";
+    window.location.href = "deck.html";
   });
 
   updateButton.addEventListener("click", () => {

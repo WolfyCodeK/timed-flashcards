@@ -26,7 +26,14 @@
         "open": true
       },
       "dialog": {
-        "message": true
+        "all": true,
+        "confirm": true,
+        "message": true,
+        "open": true,
+        "save": true
+      },
+      "fs": {
+        "all": true
       }
     },
     "systemTray": {
