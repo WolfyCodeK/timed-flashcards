@@ -8,7 +8,10 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Flashcard App</h1>
+        <div class="header">
+            <h1 class="title">Flashcard App</h1>
+            <button id="settings-button" class="settings-button">Settings</button>
+        </div>
         <div class="form-container">
             <div class="column">
                 <div class="form-group">
@@ -50,6 +53,13 @@
             <button id="navigate-deck">View Decks</button>
         </div>
     </div>
+
+    <div id="settings-menu" class="settings-menu">
+        <label for="file-path">File Path:</label>
+        <input type="text" id="file-path">
+        <button id="browse-button">Browse...</button>
+    </div>
+
     <script type="module" src="src/deck.ts"></script>
 </body>
 </html>

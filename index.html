@@ -8,7 +8,10 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Deck List</h1>
+        <div class="header">
+            <h1 class="title">Deck List</h1>
+            <button id="settings-button" class="settings-button">Settings</button>
+        </div>
         <div class="column">
             <div class="select-all">
                 <input type="checkbox" id="select-all-checkbox">
@@ -26,6 +29,13 @@
             <button id="update-button">Check for Updates</button>
         </div>
     </div>
+
+    <div id="settings-menu" class="settings-menu">
+        <label for="file-path">File Path:</label>
+        <input type="text" id="file-path">
+        <button id="browse-button">Browse...</button>
+    </div>
+
     <div id="context-menu" class="context-menu"></div>
     <script type="module" src="src/main.ts"></script>
 </body>

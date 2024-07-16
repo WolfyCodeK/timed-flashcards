@@ -1,11 +1,45 @@
-import {
-  checkUpdate,
-  installUpdate,
-  onUpdaterEvent,
-} from "@tauri-apps/api/updater";
+import { open } from "@tauri-apps/api/dialog";
+import { writeTextFile, readTextFile } from "@tauri-apps/api/fs";
+import { checkUpdate, installUpdate, onUpdaterEvent } from "@tauri-apps/api/updater";
 import { relaunch } from "@tauri-apps/api/process";
 import { confirm, message } from "@tauri-apps/api/dialog";
 
+// Function to handle directory browsing
+async function browseFile() {
+  const selected = await open({
+    multiple: false,
+    directory: true, // Allow selecting directories
+    filters: [{ name: 'All Files', extensions: ['*'] }]
+  });
+
+  if (selected) {
+    const filePathInput = document.getElementById('file-path') as HTMLInputElement;
+    filePathInput.value = selected as string;
+    await saveSettings(); // Save settings automatically after selecting a directory
+  }
+}
+
+// Function to save settings
+async function saveSettings() {
+  const filePathInput = document.getElementById('file-path') as HTMLInputElement;
+  const filePath = filePathInput.value;
+
+  // Save the file path to a configuration file (you can change the path as needed)
+  await writeTextFile('settings.json', JSON.stringify({ filePath }));
+}
+
+// Function to load settings
+async function loadSettings() {
+  try {
+    const settings = JSON.parse(await readTextFile('settings.json'));
+    const filePathInput = document.getElementById('file-path') as HTMLInputElement;
+    filePathInput.value = settings.filePath || '';
+  } catch (error) {
+    console.error('Error loading settings:', error);
+  }
+}
+
+// Function to check for updates
 async function checkForUpdates() {
   const unlisten = await onUpdaterEvent(({ error, status }) => {
     if (error) {
@@ -55,31 +89,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const deckList = document.getElementById("deck-list") as HTMLUListElement;
   const searchInput = document.getElementById("search") as HTMLInputElement;
-  const selectAllCheckbox = document.getElementById(
-    "select-all-checkbox"
-  ) as HTMLInputElement;
-  const navigateHomeButton = document.getElementById(
-    "navigate-home"
-  ) as HTMLButtonElement;
-  const updateButton = document.getElementById(
-    "update-button"
-  ) as HTMLButtonElement;
+  const selectAllCheckbox = document.getElementById("select-all-checkbox") as HTMLInputElement;
+  const navigateHomeButton = document.getElementById("navigate-home") as HTMLButtonElement;
+  const updateButton = document.getElementById("update-button") as HTMLButtonElement;
   const contextMenu = document.getElementById("context-menu") as HTMLDivElement;
+  const settingsButton = document.getElementById("settings-button") as HTMLButtonElement;
+  const settingsMenu = document.getElementById("settings-menu") as HTMLDivElement;
+  const browseButton = document.getElementById("browse-button") as HTMLButtonElement;
+  const settingsMenuOverlay = document.createElement("div");
+  settingsMenuOverlay.className = "settings-menu-overlay";
+  document.body.appendChild(settingsMenuOverlay);
 
   const checkboxStates = new Map<string, boolean>();
 
   function updateSelectAllCheckbox() {
-    const checkboxes = document.querySelectorAll(
-      ".deck-checkbox"
-    ) as NodeListOf<HTMLInputElement>;
+    const checkboxes = document.querySelectorAll(".deck-checkbox") as NodeListOf<HTMLInputElement>;
     const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
     selectAllCheckbox.checked = allChecked;
   }
 
   function addCheckboxListeners() {
-    const checkboxes = document.querySelectorAll(
-      ".deck-checkbox"
-    ) as NodeListOf<HTMLInputElement>;
+    const checkboxes = document.querySelectorAll(".deck-checkbox") as NodeListOf<HTMLInputElement>;
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
         checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
@@ -87,9 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    const listItems = document.querySelectorAll(
-      ".deck-list-item"
-    ) as NodeListOf<HTMLLIElement>;
+    const listItems = document.querySelectorAll(".deck-list-item") as NodeListOf<HTMLLIElement>;
     listItems.forEach((listItem) => {
       listItem.addEventListener("click", (event) => {
         const checkbox = listItem.querySelector(".deck-checkbox") as HTMLInputElement;
@@ -140,9 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function filterDecks() {
     const searchText = searchInput.value.toLowerCase();
-    const filteredDecks = decks.filter((deck) =>
-      deck.name.toLowerCase().includes(searchText)
-    );
+    const filteredDecks = decks.filter((deck) => deck.name.toLowerCase().includes(searchText));
     renderDecks(filteredDecks);
   }
 
@@ -184,9 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
   searchInput.addEventListener("input", filterDecks);
 
   selectAllCheckbox.addEventListener("change", () => {
-    const checkboxes = document.querySelectorAll(
-      ".deck-checkbox"
-    ) as NodeListOf<HTMLInputElement>;
+    const checkboxes = document.querySelectorAll(".deck-checkbox") as NodeListOf<HTMLInputElement>;
     checkboxes.forEach((checkbox) => {
       checkbox.checked = selectAllCheckbox.checked;
       checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
@@ -200,6 +224,24 @@ document.addEventListener("DOMContentLoaded", () => {
   updateButton.addEventListener("click", () => {
     checkForUpdates();
   });
+
+  settingsButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    settingsMenu.style.display = 'block';
+    settingsMenuOverlay.style.display = 'block';
+  });
+
+  browseButton.addEventListener("click", () => {
+    browseFile();
+  });
+
+  settingsMenuOverlay.addEventListener("click", () => {
+    settingsMenu.style.display = 'none';
+    settingsMenuOverlay.style.display = 'none';
+  });
+
+  // Load settings when the page is loaded
+  loadSettings();
 
   renderDecks(decks);
 });
