@@ -1,21 +1,27 @@
 import { open } from "@tauri-apps/api/dialog";
-import { writeTextFile, readTextFile } from "@tauri-apps/api/fs";
+import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { checkUpdate, installUpdate, onUpdaterEvent } from "@tauri-apps/api/updater";
 import { relaunch } from "@tauri-apps/api/process";
 import { confirm, message } from "@tauri-apps/api/dialog";
 
+const SETTINGS_FILE = "settings.json";
+
 // Function to handle directory browsing
 async function browseFile() {
-  const selected = await open({
-    multiple: false,
-    directory: true, // Allow selecting directories
-    filters: [{ name: 'All Files', extensions: ['*'] }]
-  });
+  try {
+    const selected = await open({
+      multiple: false,
+      directory: true, // Allow selecting directories
+      filters: [{ name: 'All Files', extensions: ['*'] }]
+    });
 
-  if (selected) {
-    const filePathInput = document.getElementById('file-path') as HTMLInputElement;
-    filePathInput.value = selected as string;
-    await saveSettings(); // Save settings automatically after selecting a directory
+    if (selected) {
+      const filePathInput = document.getElementById('file-path') as HTMLInputElement;
+      filePathInput.value = selected as string;
+      await saveSettings(); // Save settings automatically after selecting a directory
+    }
+  } catch (error) {
+    console.error('Error browsing file:', error);
   }
 }
 
@@ -24,14 +30,18 @@ async function saveSettings() {
   const filePathInput = document.getElementById('file-path') as HTMLInputElement;
   const filePath = filePathInput.value;
 
-  // Save the file path to a configuration file (you can change the path as needed)
-  await writeTextFile('settings.json', JSON.stringify({ filePath }));
+  try {
+    // Save the file path to a configuration file in the application data directory
+    await writeTextFile(SETTINGS_FILE, JSON.stringify({ filePath }), { dir: BaseDirectory.AppData });
+  } catch (error) {
+    console.error('Error saving settings:', error);
+  }
 }
 
 // Function to load settings
 async function loadSettings() {
   try {
-    const settings = JSON.parse(await readTextFile('settings.json'));
+    const settings = JSON.parse(await readTextFile(SETTINGS_FILE, { dir: BaseDirectory.AppData }));
     const filePathInput = document.getElementById('file-path') as HTMLInputElement;
     filePathInput.value = settings.filePath || '';
   } catch (error) {
@@ -167,8 +177,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function filterDecks() {
-    const searchText = searchInput.value.toLowerCase();
-    const filteredDecks = decks.filter((deck) => deck.name.toLowerCase().includes(searchText));
+    const searchTerm = searchInput.value.toLowerCase();
+    const filteredDecks = decks.filter((deck) =>
+      deck.name.toLowerCase().includes(searchTerm)
+    );
     renderDecks(filteredDecks);
   }
 
@@ -203,9 +215,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Prevent the default context menu from appearing
-  document.addEventListener("contextmenu", (event) => {
-    event.preventDefault();
-  });
+  // document.addEventListener("contextmenu", (event) => {
+  //   event.preventDefault();
+  // });
 
   searchInput.addEventListener("input", filterDecks);
 
