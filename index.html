@@ -5,35 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deck List</title>
     <link rel="stylesheet" href="src/styles.css">
+    <link rel="stylesheet" href="src/components/toolbar.css">
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="title">Deck List</h1>
-            <button id="settings-button" class="settings-button">Settings</button>
-        </div>
-        <div class="column">
-            <div class="select-all">
-                <input type="checkbox" id="select-all-checkbox">
-                <label for="select-all-checkbox">Select All</label>
+    <div id="app">
+        <div class="toolbar">
+            <div class="menu-bar">
+                <div class="menu-items">
+                    <span>File</span>
+                    <span>Edit</span>
+                    <span>View</span>
+                    <span>Tools</span>
+                    <span>Help</span>
+                </div>
             </div>
-            <div class="search-bar">
-                <input type="text" id="search" placeholder="Search for decks...">
+            <div class="tab-bar">
+                <div class="tab-items">
+                    <span class="active">Decks</span>
+                    <span>Add</span>
+                    <span>Browse</span>
+                    <span>Stats</span>
+                    <span>Sync</span>
+                </div>
             </div>
-            <ul class="deck-list" id="deck-list">
-                <!-- Deck items will be dynamically inserted here -->
-            </ul>
         </div>
-        <div class="button-group">
-            <button id="navigate-home">Back to Home</button>
-            <button id="update-button">Check for Updates</button>
+        <div class="container">
+            <div class="header">
+                <h1 class="title">Deck List</h1>
+                <div class="header-actions">
+                    <button id="import-deck" class="action-button">Import Deck</button>
+                    <button id="create-deck" class="action-button">Create Deck</button>
+                </div>
+            </div>
+            <div class="column">
+                <div class="select-all">
+                    <input type="checkbox" id="select-all-checkbox">
+                    <label for="select-all-checkbox">Select All</label>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="search" placeholder="Search for decks...">
+                </div>
+                <ul class="deck-list" id="deck-list">
+                    <!-- Deck items will be dynamically inserted here -->
+                </ul>
+            </div>
+            <div class="button-group">
+                <button id="navigate-home">Back to Home</button>
+                <button id="update-button">Check for Updates</button>
+            </div>
         </div>
-    </div>
-
-    <div id="settings-menu" class="settings-menu">
-        <label for="file-path">File Path:</label>
-        <input type="text" id="file-path">
-        <button id="browse-button">Browse...</button>
     </div>
 
     <div id="context-menu" class="context-menu"></div>

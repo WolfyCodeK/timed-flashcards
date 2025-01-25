@@ -1,0 +1,86 @@
+.toolbar {
+  user-select: none;
+  color: #ffffff;
+}
+
+.menu-bar {
+  background-color: #2f2f2f;
+  padding: 0;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.menu-items {
+  display: flex;
+  padding: 0;
+}
+
+.menu-items span {
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #e0e0e0;
+}
+
+.menu-items span:hover {
+  background-color: #404040;
+}
+
+.tab-bar {
+  background-color: #363636;
+  padding: 0;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.tab-items {
+  display: flex;
+  padding: 0;
+}
+
+.tab-items span {
+  padding: 6px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #e0e0e0;
+}
+
+.tab-items span:hover {
+  color: #ffffff;
+  background-color: #404040;
+}
+
+/* Active state for the current tab */
+.tab-items span.active {
+  color: #ffffff;
+  background-color: #404040;
+}
+
+/* Add submenu styling */
+.menu-items span.has-submenu {
+  position: relative;
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2f2f2f;
+  border: 1px solid #1a1a1a;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.submenu span {
+  display: block;
+  padding: 6px 16px;
+}
+
+.submenu span.shortcut {
+  color: #808080;
+  float: right;
+  margin-left: 20px;
+}
+
+.menu-items span:hover .submenu {
+  display: block;
+} 

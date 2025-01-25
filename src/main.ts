@@ -3,6 +3,13 @@ import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { checkUpdate, installUpdate, onUpdaterEvent } from "@tauri-apps/api/updater";
 import { relaunch } from "@tauri-apps/api/process";
 import { confirm, message } from "@tauri-apps/api/dialog";
+import './components/toolbar.css'
+import { appWindow } from '@tauri-apps/api/window';
+import { listen } from '@tauri-apps/api/event';
+import { DeckRunner } from './services/deckRunner';
+import { importDeckFromFile, saveDeckToFile, decks, createNewDeck, deleteDeck } from './store/deckStore';
+import type { Deck, DeckRunnerSettings } from './types/deck';
+import { NewDeckDialog } from './components/NewDeckDialog';
 
 const SETTINGS_FILE = "settings.json";
 
@@ -87,28 +94,42 @@ async function checkForUpdates() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const decks: { name: string; itemCount: number }[] = [
-    { name: "Math Deck", itemCount: 5 },
-    { name: "English Deck", itemCount: 10 },
-    { name: "Science Deck", itemCount: 8 },
-    { name: "History Deck", itemCount: 6 },
-    { name: "Geography Deck", itemCount: 7 },
-    { name: "Art Deck", itemCount: 4 },
-  ];
+let currentRunner: DeckRunner | null = null;
 
+document.addEventListener('DOMContentLoaded', () => {
+  // Add event listeners for the menu items
+  const menuItems = document.querySelectorAll('.menu-items span');
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      console.log(`Clicked ${item.textContent}`);
+      // Add your menu item functionality here
+    });
+  });
+
+  const tabItems = document.querySelectorAll('.tab-items span');
+  tabItems.forEach(item => {
+    item.addEventListener('click', () => {
+      console.log(`Clicked ${item.textContent}`);
+      // Add your tab item functionality here
+    });
+  });
+
+  // Get references to all required elements
   const deckList = document.getElementById("deck-list") as HTMLUListElement;
   const searchInput = document.getElementById("search") as HTMLInputElement;
   const selectAllCheckbox = document.getElementById("select-all-checkbox") as HTMLInputElement;
-  const navigateHomeButton = document.getElementById("navigate-home") as HTMLButtonElement;
-  const updateButton = document.getElementById("update-button") as HTMLButtonElement;
-  const contextMenu = document.getElementById("context-menu") as HTMLDivElement;
-  const settingsButton = document.getElementById("settings-button") as HTMLButtonElement;
-  const settingsMenu = document.getElementById("settings-menu") as HTMLDivElement;
-  const browseButton = document.getElementById("browse-button") as HTMLButtonElement;
-  const settingsMenuOverlay = document.createElement("div");
-  settingsMenuOverlay.className = "settings-menu-overlay";
-  document.body.appendChild(settingsMenuOverlay);
+  const navigateHomeButton = document.getElementById("navigate-home");
+  const updateButton = document.getElementById("update-button");
+  const contextMenu = document.getElementById("context-menu");
+  const createDeckButton = document.getElementById("create-deck");
+  const importDeckButton = document.getElementById("import-deck");
+
+  // Check if all required elements exist
+  if (!deckList || !searchInput || !selectAllCheckbox || !contextMenu || 
+      !createDeckButton || !importDeckButton || !navigateHomeButton || !updateButton) {
+      console.error("Required elements not found in the DOM");
+      return;
+  }
 
   const checkboxStates = new Map<string, boolean>();
 
@@ -122,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const checkboxes = document.querySelectorAll(".deck-checkbox") as NodeListOf<HTMLInputElement>;
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
-        checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
+        checkboxStates.set(checkbox.dataset.deckId!, checkbox.checked);
         updateSelectAllCheckbox();
       });
     });
@@ -133,58 +154,60 @@ document.addEventListener("DOMContentLoaded", () => {
         const checkbox = listItem.querySelector(".deck-checkbox") as HTMLInputElement;
         if (event.target !== checkbox) {
           checkbox.checked = !checkbox.checked;
-          checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
+          checkboxStates.set(checkbox.dataset.deckId!, checkbox.checked);
           updateSelectAllCheckbox();
         }
       });
     });
   }
 
-  function renderDecks(filteredDecks: { name: string; itemCount: number }[]) {
-    deckList.innerHTML = "";
+  function renderDecks(deckList: HTMLUListElement, currentDecks: Deck[]) {
+    deckList.innerHTML = '';
 
-    filteredDecks.forEach((deck) => {
-      const listItem = document.createElement("li");
-      listItem.className = "deck-list-item";
+    currentDecks.forEach(deck => {
+        const listItem = document.createElement('li');
+        listItem.className = 'deck-list-item';
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.className = "deck-checkbox";
-      checkbox.dataset.deckName = deck.name;
-      checkbox.checked = checkboxStates.get(deck.name) || false;
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'deck-checkbox';
+        checkbox.dataset.deckId = deck.id;
 
-      const deckName = document.createElement("span");
-      deckName.className = "deck-name";
-      deckName.textContent = deck.name;
+        const deckName = document.createElement('span');
+        deckName.className = 'deck-name';
+        deckName.textContent = deck.name;
 
-      const itemCount = document.createElement("span");
-      itemCount.className = "deck-item-count";
-      itemCount.textContent = `${deck.itemCount} items`;
+        const itemCount = document.createElement('span');
+        itemCount.className = 'deck-item-count';
+        itemCount.textContent = `${deck.cards.length} items`;
 
-      listItem.appendChild(checkbox);
-      listItem.appendChild(deckName);
-      listItem.appendChild(itemCount);
+        listItem.appendChild(checkbox);
+        listItem.appendChild(deckName);
+        listItem.appendChild(itemCount);
 
-      deckList.appendChild(listItem);
+        listItem.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            showContextMenu(event, deck.id);
+        });
 
-      listItem.addEventListener("contextmenu", (event) => {
-        event.preventDefault();
-        showContextMenu(event, deck.name);
-      });
+        deckList.appendChild(listItem);
     });
 
-    addCheckboxListeners();
+    updateSelectAllCheckbox();
   }
 
   function filterDecks() {
     const searchTerm = searchInput.value.toLowerCase();
-    const filteredDecks = decks.filter((deck) =>
-      deck.name.toLowerCase().includes(searchTerm)
+    const filteredDecks = decks.get().filter(deck => 
+        deck.name.toLowerCase().includes(searchTerm)
     );
-    renderDecks(filteredDecks);
+    renderDecks(deckList, filteredDecks);
   }
 
-  function showContextMenu(event: MouseEvent, deckName: string) {
+  function showContextMenu(event: MouseEvent, deckId: string) {
+    const deck = decks.get().find(d => d.id === deckId);
+    if (!deck) return;
+
     contextMenu.style.display = "block";
     contextMenu.style.left = `${event.pageX}px`;
     contextMenu.style.top = `${event.pageY}px`;
@@ -193,16 +216,17 @@ document.addEventListener("DOMContentLoaded", () => {
     editOption.className = "context-menu-item";
     editOption.textContent = "Edit";
     editOption.addEventListener("click", () => {
-      console.log(`Edit ${deckName}`);
-      contextMenu.style.display = "none";
+        console.log(`Edit ${deck.name}`);
+        contextMenu.style.display = "none";
     });
 
     const deleteOption = document.createElement("div");
     deleteOption.className = "context-menu-item";
     deleteOption.textContent = "Delete";
     deleteOption.addEventListener("click", () => {
-      console.log(`Delete ${deckName}`);
-      contextMenu.style.display = "none";
+        deleteDeck(deckId);
+        renderDecks(deckList, decks.get());
+        contextMenu.style.display = "none";
     });
 
     contextMenu.innerHTML = "";
@@ -225,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const checkboxes = document.querySelectorAll(".deck-checkbox") as NodeListOf<HTMLInputElement>;
     checkboxes.forEach((checkbox) => {
       checkbox.checked = selectAllCheckbox.checked;
-      checkboxStates.set(checkbox.dataset.deckName!, checkbox.checked);
+      checkboxStates.set(checkbox.dataset.deckId!, checkbox.checked);
     });
   });
 
@@ -237,23 +261,75 @@ document.addEventListener("DOMContentLoaded", () => {
     checkForUpdates();
   });
 
-  settingsButton.addEventListener("click", (event) => {
-    event.stopPropagation();
-    settingsMenu.style.display = 'block';
-    settingsMenuOverlay.style.display = 'block';
+  // Initialize deck list
+  renderDecks(deckList, decks.get());
+
+  // Add subscription to deck changes
+  decks.subscribe(updatedDecks => {
+    console.log('Decks updated:', updatedDecks);
+    renderDecks(deckList, updatedDecks);
   });
 
-  browseButton.addEventListener("click", () => {
-    browseFile();
+  // Create new deck button
+  createDeckButton.addEventListener('click', () => {
+    console.log('Create deck button clicked');
+    const dialog = new NewDeckDialog(async (name) => {
+        console.log('Creating new deck with name:', name);
+        const deck = await createNewDeck(name);
+        console.log('Created deck:', deck);
+        renderDecks(deckList, [...decks.get()]);
+    });
+    dialog.show();
   });
 
-  settingsMenuOverlay.addEventListener("click", () => {
-    settingsMenu.style.display = 'none';
-    settingsMenuOverlay.style.display = 'none';
+  // Import deck button
+  importDeckButton.addEventListener('click', async () => {
+    console.log('Import deck button clicked');
+    const deck = await importDeckFromFile();
+    console.log('Imported deck:', deck);
+    if (deck) {
+        renderDecks(deckList, [...decks.get()]);
+    }
   });
 
-  // Load settings when the page is loaded
-  loadSettings();
+  // Run selected decks button
+  document.getElementById('run-selected')?.addEventListener('click', async () => {
+    const selectedDeckIds = Array.from(document.querySelectorAll('.deck-checkbox:checked'))
+      .map(cb => (cb as HTMLInputElement).dataset.deckId)
+      .filter((id): id is string => id !== undefined);
 
-  renderDecks(decks);
+    if (selectedDeckIds.length === 0) return;
+
+    // For now, just run the first selected deck
+    const deck = decks.get().find(d => d.id === selectedDeckIds[0]);
+    if (!deck) return;
+
+    const settings: DeckRunnerSettings = {
+      interval: 10,
+      intervalUnit: 'minutes',
+      shuffle: false
+    };
+
+    currentRunner = new DeckRunner(deck, settings);
+    await currentRunner.start();
+    await appWindow.hide();
+  });
+
+  // Listen for system tray commands
+  listen('deck-runner-command', (event) => {
+    if (!currentRunner) return;
+
+    switch (event.payload) {
+      case 'pause':
+        currentRunner.pause();
+        break;
+      case 'resume':
+        currentRunner.resume();
+        break;
+      case 'stop':
+        currentRunner.stop();
+        currentRunner = null;
+        break;
+    }
+  });
 });

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timed Flashcards - Edit Deck</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components/toolbar.css">
+</head>
+<body>
+    <div id="app">
+        <div class="toolbar">
+            <!-- Same toolbar as above -->
+        </div>
+        <div class="container">
+            <div class="header">
+                <h1 class="title">Edit Deck: <span id="deck-name"></span></h1>
+                <div class="header-actions">
+                    <button id="save-deck">Save</button>
+                    <button id="export-deck">Export to File</button>
+                </div>
+            </div>
+            <div class="editor-container">
+                <div class="card-list" id="card-list">
+                    <!-- Cards will be listed here with edit capabilities -->
+                </div>
+                <div class="card-editor">
+                    <textarea id="card-content" placeholder="Enter card content..."></textarea>
+                    <button id="add-card">Add Card</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

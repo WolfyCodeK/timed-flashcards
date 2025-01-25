@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timed Flashcards - Decks</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components/toolbar.css">
+</head>
+<body>
+    <div id="app">
+        <div class="toolbar">
+            <div class="menu-bar">
+                <div class="menu-items">
+                    <span>File</span>
+                    <span>Edit</span>
+                    <span>View</span>
+                    <span>Tools</span>
+                    <span>Help</span>
+                </div>
+            </div>
+            <div class="tab-bar">
+                <div class="tab-items">
+                    <span class="active">Decks</span>
+                    <span>Add</span>
+                    <span>Browse</span>
+                    <span>Stats</span>
+                    <span>Sync</span>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="header">
+                <h1 class="title">Deck List</h1>
+                <button id="import-deck" class="action-button">Import Text File</button>
+            </div>
+            <div class="deck-list" id="deck-list">
+                <!-- Decks will be listed here -->
+            </div>
+            <div class="button-group">
+                <button id="create-deck">Create New Deck</button>
+                <button id="run-selected">Run Selected Decks</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
