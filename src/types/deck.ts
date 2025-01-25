@@ -1,7 +1,7 @@
 export interface Card {
     id: string;
     content: string;
-    created: Date;
+    created: string; // ISO string
     lastShown?: Date;
 }
 
@@ -9,13 +9,13 @@ export interface Deck {
     id: string;
     name: string;
     cards: Card[];
-    created: Date;
-    lastModified: Date;
+    created: string; // ISO string
+    lastModified: string; // ISO string
     filePath?: string;  // Path to associated text file if imported
 }
 
 export interface DeckRunnerSettings {
     interval: number;
-    intervalUnit: 'minutes' | 'hours';
+    intervalUnit: 'seconds' | 'minutes' | 'hours';
     shuffle: boolean;
 } 

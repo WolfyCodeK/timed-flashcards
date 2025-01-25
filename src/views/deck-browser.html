@@ -3,27 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Deck</title>
+    <title>Browse Deck</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../components/toolbar.css">
 </head>
 <body>
     <div id="app">
+        <div class="toolbar">
+            <!-- Same toolbar as main -->
+        </div>
         <div class="container">
             <div class="header">
-                <h1 class="title">Edit Deck: <span id="deck-name"></span></h1>
+                <h1 class="title">Browse: <span id="deck-name"></span></h1>
                 <div class="header-actions">
-                    <button id="add-card" class="action-button">Add Card</button>
-                    <button id="save-deck" class="action-button">Save</button>
+                    <button id="edit-deck" class="action-button">Edit</button>
+                    <button id="run-deck" class="action-button">Run Deck</button>
                 </div>
             </div>
-            <div class="card-editor">
+            <div class="card-browser">
                 <div class="card-list" id="card-list">
                     <!-- Cards will be listed here -->
                 </div>
             </div>
         </div>
     </div>
-    <script type="module" src="../editor.ts"></script>
+    <script type="module" src="../browser.ts"></script>
 </body>
 </html> 

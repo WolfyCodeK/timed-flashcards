@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Decks</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="runner-dialog">
+        <h2>Run Settings</h2>
+        <div class="form-group">
+            <label>Show cards every:</label>
+            <div class="interval-input">
+                <input type="number" id="interval" value="30" min="1">
+                <select id="interval-unit">
+                    <option value="seconds">Seconds</option>
+                    <option value="minutes">Minutes</option>
+                    <option value="hours">Hours</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" id="shuffle">
+                Shuffle cards
+            </label>
+        </div>
+        <div class="button-group">
+            <button id="cancel" class="action-button">Cancel</button>
+            <button id="start-deck" class="action-button">Start</button>
+        </div>
+    </div>
+    <script type="module" src="../runner-dialog.ts"></script>
+</body>
+</html> 

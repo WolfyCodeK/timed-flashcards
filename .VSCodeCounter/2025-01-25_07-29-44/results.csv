@@ -1,0 +1,35 @@
+"filename", "language", "HTML", "JSON with Comments", "Markdown", "JSON", "Rust", "TypeScript", "CSS", "XML", "comment", "blank", "total"
+"d:\DATA\VSCode\Tauri\timed-flashcards\README.md", "Markdown", 0, 0, 4, 0, 0, 0, 0, 0, 0, 4, 8
+"d:\DATA\VSCode\Tauri\timed-flashcards\deck.html", "HTML", 63, 0, 0, 0, 0, 0, 0, 0, 0, 3, 66
+"d:\DATA\VSCode\Tauri\timed-flashcards\index.html", "HTML", 61, 0, 0, 0, 0, 0, 0, 0, 1, 2, 64
+"d:\DATA\VSCode\Tauri\timed-flashcards\package-lock.json", "JSON", 0, 0, 0, 1120, 0, 0, 0, 0, 0, 1, 1121
+"d:\DATA\VSCode\Tauri\timed-flashcards\package.json", "JSON", 0, 0, 0, 23, 0, 0, 0, 0, 0, 1, 24
+"d:\DATA\VSCode\Tauri\timed-flashcards\src-tauri\build.rs", "Rust", 0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 4
+"d:\DATA\VSCode\Tauri\timed-flashcards\src-tauri\src\main.rs", "Rust", 0, 0, 0, 0, 68, 0, 0, 0, 6, 9, 83
+"d:\DATA\VSCode\Tauri\timed-flashcards\src-tauri\tauri.conf.json", "JSON", 0, 0, 0, 84, 0, 0, 0, 0, 0, 1, 85
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\assets\tauri.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 6, 0, 1, 7
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\assets\typescript.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 24, 0, 2, 26
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\assets\vite.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\browser.ts", "TypeScript", 0, 0, 0, 0, 0, 54, 0, 0, 6, 10, 70
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\components\NewDeckDialog.ts", "TypeScript", 0, 0, 0, 0, 0, 44, 0, 0, 0, 7, 51
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\components\Toolbar.css", "CSS", 0, 0, 0, 0, 0, 0, 70, 0, 2, 14, 86
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\components\flashcard.ts", "TypeScript", 0, 0, 0, 0, 0, 21, 0, 0, 0, 6, 27
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\components\flashcard_list.ts", "TypeScript", 0, 0, 0, 0, 0, 10, 0, 0, 0, 3, 13
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\deck.ts", "TypeScript", 0, 0, 0, 0, 0, 15, 0, 0, 3, 3, 21
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\editor.ts", "TypeScript", 0, 0, 0, 0, 0, 158, 0, 0, 8, 32, 198
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\main.ts", "TypeScript", 0, 0, 0, 0, 0, 284, 0, 0, 21, 51, 356
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\runner-dialog.ts", "TypeScript", 0, 0, 0, 0, 0, 27, 0, 0, 3, 7, 37
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\services\deckRunner.ts", "TypeScript", 0, 0, 0, 0, 0, 72, 0, 0, 3, 13, 88
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\store\deckStore.ts", "TypeScript", 0, 0, 0, 0, 0, 173, 0, 0, 5, 32, 210
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\store\store.ts", "TypeScript", 0, 0, 0, 0, 0, 35, 0, 0, 0, 9, 44
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\styles.css", "CSS", 0, 0, 0, 0, 0, 0, 378, 0, 5, 65, 448
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\types\deck.ts", "TypeScript", 0, 0, 0, 0, 0, 19, 0, 0, 0, 2, 21
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\views\card-popup.html", "HTML", 20, 0, 0, 0, 0, 0, 0, 0, 1, 0, 21
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-browser.html", "HTML", 30, 0, 0, 0, 0, 0, 0, 0, 2, 0, 32
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-editor.html", "HTML", 28, 0, 0, 0, 0, 0, 0, 0, 1, 0, 29
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-list.html", "HTML", 46, 0, 0, 0, 0, 0, 0, 0, 1, 0, 47
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-runner-dialog.html", "HTML", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 34
+"d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-runner.html", "HTML", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 34
+"d:\DATA\VSCode\Tauri\timed-flashcards\tsconfig.json", "JSON with Comments", 0, 19, 0, 0, 0, 0, 0, 0, 2, 3, 24
+"d:\DATA\VSCode\Tauri\timed-flashcards\vite.config.ts", "TypeScript", 0, 0, 0, 0, 0, 11, 0, 0, 6, 3, 20
+"Total", "-", 316, 19, 4, 1227, 71, 923, 448, 31, 76, 285, 3400

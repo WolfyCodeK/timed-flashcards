@@ -1,0 +1,76 @@
+Date : 2025-01-25 07:29:44
+Directory : d:\DATA\VSCode\Tauri\timed-flashcards
+Total : 33 files,  3039 codes, 76 comments, 285 blanks, all 3400 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          3 |      1,227 |          0 |          3 |      1,230 |
+| TypeScript         |         13 |        923 |         55 |        178 |      1,156 |
+| CSS                |          2 |        448 |          7 |         79 |        534 |
+| HTML               |          8 |        316 |          6 |          5 |        327 |
+| Rust               |          2 |         71 |          6 |         10 |         87 |
+| XML                |          3 |         31 |          0 |          3 |         34 |
+| JSON with Comments |          1 |         19 |          2 |          3 |         24 |
+| Markdown           |          1 |          4 |          0 |          4 |          8 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                    | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                       |         33 |      3,039 |         76 |        285 |      3,400 |
+| . (Files)                                                               |          7 |      1,301 |          9 |         17 |      1,327 |
+| src                                                                     |         23 |      1,583 |         61 |        257 |      1,901 |
+| src (Files)                                                             |          6 |        916 |         46 |        168 |      1,130 |
+| src-tauri                                                               |          3 |        155 |          6 |         11 |        172 |
+| src-tauri (Files)                                                       |          2 |         87 |          0 |          2 |         89 |
+| src-tauri\src                                                           |          1 |         68 |          6 |          9 |         83 |
+| src\assets                                                              |          3 |         31 |          0 |          3 |         34 |
+| src\components                                                          |          4 |        145 |          2 |         30 |        177 |
+| src\services                                                            |          1 |         72 |          3 |         13 |         88 |
+| src\store                                                               |          2 |        208 |          5 |         41 |        254 |
+| src\types                                                               |          1 |         19 |          0 |          2 |         21 |
+| src\views                                                               |          6 |        192 |          5 |          0 |        197 |
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                | language           | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| d:\DATA\VSCode\Tauri\timed-flashcards\README.md                         | Markdown           |          4 |          0 |          4 |          8 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\deck.html                         | HTML               |         63 |          0 |          3 |         66 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\index.html                        | HTML               |         61 |          1 |          2 |         64 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\package-lock.json                 | JSON               |      1,120 |          0 |          1 |      1,121 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\package.json                      | JSON               |         23 |          0 |          1 |         24 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src-tauri\build.rs                | Rust               |          3 |          0 |          1 |          4 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src-tauri\src\main.rs             | Rust               |         68 |          6 |          9 |         83 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src-tauri\tauri.conf.json         | JSON               |         84 |          0 |          1 |         85 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\assets\tauri.svg              | XML                |          6 |          0 |          1 |          7 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\assets\typescript.svg         | XML                |         24 |          0 |          2 |         26 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\assets\vite.svg               | XML                |          1 |          0 |          0 |          1 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\browser.ts                    | TypeScript         |         54 |          6 |         10 |         70 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\components\NewDeckDialog.ts   | TypeScript         |         44 |          0 |          7 |         51 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\components\Toolbar.css        | CSS                |         70 |          2 |         14 |         86 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\components\flashcard.ts       | TypeScript         |         21 |          0 |          6 |         27 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\components\flashcard_list.ts  | TypeScript         |         10 |          0 |          3 |         13 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\deck.ts                       | TypeScript         |         15 |          3 |          3 |         21 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\editor.ts                     | TypeScript         |        158 |          8 |         32 |        198 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\main.ts                       | TypeScript         |        284 |         21 |         51 |        356 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\runner-dialog.ts              | TypeScript         |         27 |          3 |          7 |         37 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\services\deckRunner.ts        | TypeScript         |         72 |          3 |         13 |         88 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\store\deckStore.ts            | TypeScript         |        173 |          5 |         32 |        210 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\store\store.ts                | TypeScript         |         35 |          0 |          9 |         44 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\styles.css                    | CSS                |        378 |          5 |         65 |        448 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\types\deck.ts                 | TypeScript         |         19 |          0 |          2 |         21 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\views\card-popup.html         | HTML               |         20 |          1 |          0 |         21 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-browser.html       | HTML               |         30 |          2 |          0 |         32 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-editor.html        | HTML               |         28 |          1 |          0 |         29 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-list.html          | HTML               |         46 |          1 |          0 |         47 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-runner-dialog.html | HTML               |         34 |          0 |          0 |         34 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\src\views\deck-runner.html        | HTML               |         34 |          0 |          0 |         34 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\tsconfig.json                     | JSON with Comments |         19 |          2 |          3 |         24 |
+| d:\DATA\VSCode\Tauri\timed-flashcards\vite.config.ts                    | TypeScript         |         11 |          6 |          3 |         20 |
+| Total                                                                   |                    |      3,039 |         76 |        285 |      3,400 |
++-------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

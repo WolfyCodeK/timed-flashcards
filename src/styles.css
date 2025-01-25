@@ -339,3 +339,237 @@ button:hover {
 .action-button:hover {
     background-color: #5f73a1;
 }
+
+/* Add these to your existing styles.css */
+
+.card-browser {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.card-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.card-item {
+    background-color: #40444b;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.runner-dialog {
+    background-color: #2f3136;
+    padding: 16px;
+    width: auto;
+    margin: 0;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.runner-dialog h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.runner-dialog .form-group {
+    margin: 0;
+}
+
+.runner-dialog label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.interval-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.interval-input input[type="number"] {
+    width: 60px;
+    padding: 6px;
+    background-color: #40444b;
+    border: 1px solid #202225;
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+.interval-input select {
+    flex: 1;
+    padding: 6px;
+    background-color: #40444b;
+    border: 1px solid #202225;
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.runner-dialog .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 0;
+}
+
+.runner-dialog .action-button {
+    padding: 6px 16px;
+    background-color: #7289da;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.runner-dialog .action-button:hover {
+    background-color: #5f73a1;
+}
+
+/* Add these to your existing styles.css */
+
+.card-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.card-item-editor {
+    background-color: #40444b;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.card-content {
+    flex: 1;
+    background-color: #2f3136;
+    border: 1px solid #202225;
+    color: #ffffff;
+    padding: 8px;
+    border-radius: 4px;
+    min-height: 60px;
+    resize: vertical;
+}
+
+.card-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.card-action-button {
+    padding: 5px 10px;
+    background-color: #7289da;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.card-action-button.delete {
+    background-color: #f04747;
+}
+
+.card-action-button:hover {
+    filter: brightness(90%);
+}
+
+/* Add these to your existing styles.css */
+
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #40444b;
+    border-radius: 5px;
+}
+
+.sort-select {
+    padding: 8px;
+    background-color: #2f3136;
+    color: #ffffff;
+    border: 1px solid #202225;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sort-select:hover {
+    background-color: #36393f;
+}
+
+.sort-select option {
+    background-color: #2f3136;
+    color: #ffffff;
+}
+
+/* Add these body styles for the runner dialog */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #2f3136;
+}
+
+.card-popup {
+    background-color: #2f3136;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.card-popup .card-content {
+    font-size: 24px;
+    text-align: center;
+    color: #ffffff;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.card-popup .card-progress {
+    color: #7289da;
+    font-size: 14px;
+}

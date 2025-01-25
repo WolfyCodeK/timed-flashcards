@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "Timed Flashcards",
+    "productName": "TimedFlashcards",
     "version": "0.1.0"
   },
   "tauri": {
@@ -58,7 +58,7 @@
     },
     "windows": [
       {
-        "title": "Timed Flashcards",
+        "title": "TimedFlashcards",
         "width": 800,
         "height": 600,
         "minWidth": 800,

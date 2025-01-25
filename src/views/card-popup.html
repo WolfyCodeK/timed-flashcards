@@ -5,17 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard</title>
     <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #2c2c2c;  /* Dark background matching your app */
+            color: white;
+        }
+        .card-popup {
+            background: #2c2c2c;
+            border: none;
+            outline: none;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .card-content {
+            font-size: 24px;
+            padding: 20px;
+            text-align: center;
+            min-height: 100px;
+            background: #2c2c2c;
+            border: none;
+            outline: none;
+            color: white;
+        }
+        .card-progress {
+            text-align: center;
+            padding: 10px;
+            color: #999;
+            background: #2c2c2c;
+            border: none;
+            outline: none;
+        }
+    </style>
 </head>
 <body>
     <div class="card-popup">
-        <div class="card-content" id="card-content">
-            <!-- Card content will be displayed here -->
-        </div>
-        <div class="button-group">
-            <button id="next-card">Next</button>
-            <button id="pause">Pause</button>
-            <button id="stop">Stop</button>
-        </div>
+        <div id="card-content" class="card-content">Loading...</div>
+        <div id="card-progress" class="card-progress">...</div>
     </div>
+    <script type="module" src="../card-popup.ts"></script>
 </body>
 </html> 
