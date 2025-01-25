@@ -5,10 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Run Decks</title>
     <link rel="stylesheet" href="../styles.css">
+    <style>
+        .runner-dialog {
+            padding: 20px;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+        .selected-decks {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background: #363636;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .selected-decks h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #999;
+        }
+        .selected-deck-item {
+            padding: 5px;
+            color: #7289da;
+            font-size: 14px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .button-group {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="runner-dialog">
         <h2>Run Settings</h2>
+        <div class="selected-decks">
+            <h3>Selected Decks:</h3>
+            <div id="selected-decks-list"></div>
+        </div>
         <div class="form-group">
             <label>Show cards every:</label>
             <div class="interval-input">

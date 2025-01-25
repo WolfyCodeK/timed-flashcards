@@ -13,6 +13,53 @@ import { NewDeckDialog } from './components/NewDeckDialog';
 
 const SETTINGS_FILE = "settings.json";
 
+// Add this at the top level to track the current runner
+let currentRunner: DeckRunner | null = null;
+
+// Add this with other top-level variables
+let currentRunnerWindow: WebviewWindow | null = null;
+
+// Add this with other top-level variables
+let selectedDeckIds: string[] = [];
+
+// Move the event listener outside DOMContentLoaded
+listen('deck-runner-command', async (event) => {
+    console.log('Received deck-runner command:', event.payload);
+    console.log('Current runner state:', currentRunner ? 'exists' : 'null');
+    
+    if (!currentRunner) {
+        console.log('No active runner');
+        return;
+    }
+
+    switch (event.payload) {
+        case 'pause':
+            console.log('Pausing runner');
+            currentRunner.pause();
+            break;
+        case 'resume':
+            console.log('Resuming runner');
+            currentRunner.resume();
+            break;
+        case 'stop':
+            console.log('Stopping runner');
+            try {
+                await currentRunner?.stop();
+                console.log('Runner stopped successfully');
+                // Close the runner window
+                if (currentRunnerWindow) {
+                    await currentRunnerWindow.close();
+                    currentRunnerWindow = null;
+                }
+            } catch (error) {
+                console.error('Error stopping runner:', error);
+            }
+            currentRunner = null;
+            console.log('Current runner cleared');
+            break;
+    }
+});
+
 // Function to handle directory browsing
 async function browseFile() {
   try {
@@ -93,8 +140,6 @@ async function checkForUpdates() {
     unlisten();
   }
 }
-
-let currentRunner: DeckRunner | null = null;
 
 // Move these functions outside the DOMContentLoaded event listener
 function updateSelectAllCheckbox() {
@@ -195,10 +240,41 @@ async function renderDecks(deckList: HTMLUListElement, currentDecks: Deck[]) {
         checkbox.type = 'checkbox';
         checkbox.className = 'deck-checkbox';
         checkbox.dataset.deckId = deck.id;
+        checkbox.checked = selectedDeckIds.includes(deck.id);
 
         const deckName = document.createElement('span');
         deckName.className = 'deck-name';
         deckName.textContent = deck.name;
+        deckName.style.cursor = 'pointer';
+        deckName.addEventListener('click', async () => {
+            console.log('Opening editor for deck:', deck);
+            const editorWindow = new WebviewWindow('deck-editor', {
+                url: 'src/views/deck-editor.html',
+                title: 'Edit Deck',
+                width: 800,
+                height: 600,
+                center: true,
+            });
+
+            // Wait for the window to be ready AND for its JavaScript to initialize
+            await editorWindow.once('tauri://created', () => {
+                console.log('Editor window created, waiting to send deck...');
+                setTimeout(async () => {
+                    try {
+                        // Log the deck structure before sending
+                        console.log('Attempting to send deck to editor:', {
+                            id: deck.id,
+                            name: deck.name,
+                            flashcards: deck.flashcards // Ensure this is populated
+                        });
+                        await editorWindow.emit('edit-deck', { deck });
+                        console.log('Successfully sent deck to editor');
+                    } catch (error) {
+                        console.error('Error sending deck to editor:', error);
+                    }
+                }, 500);
+            });
+        });
 
         const itemCount = document.createElement('span');
         itemCount.className = 'deck-item-count';
@@ -208,16 +284,21 @@ async function renderDecks(deckList: HTMLUListElement, currentDecks: Deck[]) {
         listItem.appendChild(deckName);
         listItem.appendChild(itemCount);
 
-        listItem.addEventListener('contextmenu', (event) => {
-            event.preventDefault();
-            showContextMenu(event, deck.id);
-        });
-
         deckList.appendChild(listItem);
     });
 
-    // Add checkbox listeners after rendering
-    addCheckboxListeners();
+    updateSelectAllCheckbox();
+}
+
+// Add this function to update checkboxes based on selectedDeckIds
+function updateDeckCheckboxes() {
+    const checkboxes = document.querySelectorAll('.deck-checkbox') as NodeListOf<HTMLInputElement>;
+    checkboxes.forEach(checkbox => {
+        const deckId = checkbox.dataset.deckId;
+        if (deckId) {
+            checkbox.checked = selectedDeckIds.includes(deckId);
+        }
+    });
     updateSelectAllCheckbox();
 }
 
@@ -276,11 +357,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    selectAllCheckbox.addEventListener("change", () => {
-        const checkboxes = document.querySelectorAll(".deck-checkbox") as NodeListOf<HTMLInputElement>;
-        checkboxes.forEach((checkbox) => {
-            checkbox.checked = selectAllCheckbox.checked;
-            checkboxStates.set(checkbox.dataset.deckId!, checkbox.checked);
+    // Add click handler for deck checkboxes
+    document.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        if (target.classList.contains('deck-checkbox')) {
+            const checkbox = target as HTMLInputElement;
+            const deckId = checkbox.dataset.deckId;
+            if (deckId) {
+                if (checkbox.checked) {
+                    selectedDeckIds.push(deckId);
+                } else {
+                    selectedDeckIds = selectedDeckIds.filter(id => id !== deckId);
+                }
+                updateSelectAllCheckbox();
+            }
+        }
+    });
+
+    // Modify select all handler
+    document.getElementById('select-all-checkbox')?.addEventListener('change', (event) => {
+        const checkbox = event.target as HTMLInputElement;
+        const deckCheckboxes = document.querySelectorAll('.deck-checkbox') as NodeListOf<HTMLInputElement>;
+        
+        deckCheckboxes.forEach(deckCheckbox => {
+            deckCheckbox.checked = checkbox.checked;
+            const deckId = deckCheckbox.dataset.deckId;
+            if (deckId) {
+                if (checkbox.checked && !selectedDeckIds.includes(deckId)) {
+                    selectedDeckIds.push(deckId);
+                } else if (!checkbox.checked) {
+                    selectedDeckIds = selectedDeckIds.filter(id => id !== deckId);
+                }
+            }
         });
     });
 
@@ -312,12 +420,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Run selected decks button
+    // Modify the run-selected click handler
     document.getElementById('run-selected')?.addEventListener('click', async () => {
-        const selectedDeckIds = Array.from(document.querySelectorAll('.deck-checkbox:checked'))
-            .map(cb => (cb as HTMLInputElement).dataset.deckId)
-            .filter((id): id is string => id !== undefined);
-
         if (selectedDeckIds.length === 0) {
             await message('Please select at least one deck to run', {
                 title: 'No Decks Selected',
@@ -331,41 +435,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         const selectedDecks = allDecks.filter(d => selectedDeckIds.includes(d.id));
         console.log('Selected decks to run:', selectedDecks);
 
+        // Close existing runner window if it exists
+        if (currentRunnerWindow) {
+            try {
+                await currentRunnerWindow.close();
+            } catch (e) {
+                console.log('Error closing existing runner window:', e);
+            }
+            currentRunnerWindow = null;
+        }
+
         // Open the runner dialog
-        const runnerWindow = new WebviewWindow('deck-runner-dialog', {
+        currentRunnerWindow = new WebviewWindow('deck-runner-dialog', {
             url: 'src/views/deck-runner-dialog.html',
             title: 'Run Decks',
             width: 400,
-            height: 300,
+            height: 400,
             center: true,
             resizable: false
         });
 
         // Wait for the window to be ready AND for its JavaScript to initialize
-        await runnerWindow.once('tauri://created', async () => {
-            // Add a small delay to ensure the JavaScript has initialized
+        await currentRunnerWindow.once('tauri://created', async () => {
             setTimeout(async () => {
                 console.log('Sending selected decks to runner:', selectedDecks);
-                await runnerWindow.emit('selected-decks', { decks: selectedDecks });
+                await currentRunnerWindow?.emit('selected-decks', { decks: selectedDecks });
             }, 500);
         });
     });
 
-    // Listen for system tray commands
-    listen('deck-runner-command', (event) => {
-        if (!currentRunner) return;
-
-        switch (event.payload) {
-            case 'pause':
-                currentRunner.pause();
-                break;
-            case 'resume':
-                currentRunner.resume();
-                break;
-            case 'stop':
-                currentRunner.stop();
-                currentRunner = null;
-                break;
-        }
+    // Add this to update checkboxes whenever the deck list is refreshed
+    decks.subscribe(() => {
+        updateDeckCheckboxes();
     });
 });
+
+// Export this so runner-dialog.ts can set it
+export function setCurrentRunner(runner: DeckRunner | null) {
+    console.log('Setting current runner:', runner ? 'new runner' : 'null');
+    currentRunner = runner;
+}

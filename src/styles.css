@@ -237,6 +237,13 @@ button:hover {
 .deck-name {
   margin-right: auto;
   font-size: 16px;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s;
+}
+
+.deck-name:hover {
+  color: #7289da;  /* Discord-like blue color on hover */
 }
 
 .deck-item-count {

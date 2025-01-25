@@ -3,6 +3,7 @@ import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
 import type { Deck } from './types/deck';
 import { DeckRunner } from './services/deckRunner';
+import { setCurrentRunner } from './main';  // Import the setter
 
 console.log('runner-dialog.ts loaded');
 
@@ -20,6 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         selectedDecks = event.payload.decks;
         console.log('Updated selectedDecks:', selectedDecks);
+
+        // Update the selected decks list in the UI
+        const selectedDecksList = document.getElementById('selected-decks-list');
+        if (selectedDecksList) {
+            selectedDecksList.innerHTML = selectedDecks
+                .map(deck => `<div class="selected-deck-item">${deck.name}</div>`)
+                .join('');
+        }
     });
 
     const startButton = document.getElementById('start-deck');
@@ -54,12 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             console.log('start_decks command completed');
 
-            // Then create runners for each deck
-            for (const deck of selectedDecks) {
-                console.log('Creating runner for deck:', deck.name);
-                const runner = new DeckRunner(deck, settings);
-                await runner.start();
-            }
+            // Create runner and set it as current
+            const runner = new DeckRunner(selectedDecks[0], settings);
+            console.log('Created new runner:', runner);
+            setCurrentRunner(runner);  // Set the current runner
+            console.log('Current runner set, starting...');
+            await runner.start();
+            console.log('Runner started successfully');
 
             await appWindow.hide();
         } catch (error) {
