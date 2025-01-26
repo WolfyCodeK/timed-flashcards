@@ -4,12 +4,15 @@ import { invoke } from '@tauri-apps/api/tauri';
 import type { Deck } from './types/deck';
 import { DeckRunner } from './services/deckRunner';
 import { setCurrentRunner } from './main';  // Import the setter
+import { initializeTheme } from './utils/themeManager';
 
 console.log('runner-dialog.ts loaded');
 
 let selectedDecks: Deck[] = [];
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await initializeTheme();
+    
     console.log('DOM Content Loaded in runner-dialog');
     
     // Listen for deck data

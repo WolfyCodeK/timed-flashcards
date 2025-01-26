@@ -10,6 +10,8 @@ import { DeckRunner } from './services/deckRunner';
 import { importDeckFromFile, decks, createNewDeck, deleteDeck } from './store/deckStore';
 import type { Deck } from './types/deck';
 import { NewDeckDialog } from './components/NewDeckDialog';
+import { PreferencesDialog } from './components/PreferencesDialog';
+import { initializeTheme } from './utils/themeManager';
 
 const SETTINGS_FILE = "settings.json";
 
@@ -290,6 +292,9 @@ function updateDeckCheckboxes() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Add this at the start of the function
+    await initializeTheme();
+    
     // Get references to all required elements
     const deckList = document.getElementById("deck-list") as HTMLUListElement;
     const searchInput = document.getElementById("search") as HTMLInputElement;
@@ -455,6 +460,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     decks.subscribe(() => {
         updateDeckCheckboxes();
     });
+
+    // Add preferences button
+    const preferencesButton = document.createElement('button');
+    preferencesButton.className = 'action-button';
+    preferencesButton.textContent = 'Preferences';
+    preferencesButton.addEventListener('click', () => {
+        const dialog = new PreferencesDialog();
+        dialog.show();
+    });
+
+    document.querySelector('.header-actions')?.appendChild(preferencesButton);
 });
 
 // Export this so runner-dialog.ts can set it

@@ -3,6 +3,7 @@ import type { Deck, Card } from './types/deck';
 import { v4 as uuidv4 } from 'uuid';
 import { emit } from '@tauri-apps/api/event';
 import { listen } from '@tauri-apps/api/event';
+import { initializeTheme } from './utils/themeManager';
 
 let currentDeck: Deck | null = null;
 let currentSortOption: SortOption = 'date';
@@ -194,6 +195,8 @@ function renderCards() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    await initializeTheme();
+    
     console.log('Editor DOM loaded');
     
     // Wait for deck store to initialize

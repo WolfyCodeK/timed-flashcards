@@ -1,4 +1,5 @@
 import { listen } from '@tauri-apps/api/event';
+import { initializeTheme } from './utils/themeManager';
 
 console.log('card-popup.ts loaded');
 
@@ -36,7 +37,9 @@ async function setupCardPopup() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await initializeTheme();
+    
     console.log('DOM Content Loaded');
     setupCardPopup().catch(err => {
         console.error('Error in setupCardPopup:', err);
