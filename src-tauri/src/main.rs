@@ -116,10 +116,12 @@ fn main() {
         ])
         .system_tray(create_default_tray())  // Start with just quit option
         .on_window_event(|event| {
-            if let WindowEvent::CloseRequested { .. } = event.event() {
-                if event.window().label() == "main" {
-                    // Exit the application when main window is closed
-                    std::process::exit(0);
+            if let WindowEvent::CloseRequested { api, .. } = event.event() {
+                if event.window().label() == "deck-editor" {
+                    // Prevent the window from closing immediately
+                    api.prevent_close();
+                    // Emit an event to check for unsaved changes
+                    event.window().emit("close-requested", ()).unwrap();
                 }
             }
         })

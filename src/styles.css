@@ -580,3 +580,11 @@ body {
     color: #7289da;
     font-size: 14px;
 }
+
+.action-button.delete {
+    background-color: #f04747;
+}
+
+.action-button.delete:hover {
+    background-color: #d84040;
+}

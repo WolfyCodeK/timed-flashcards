@@ -1,4 +1,4 @@
-import { appWindow, WebviewWindow } from '@tauri-apps/api/window';
+import { appWindow } from '@tauri-apps/api/window';
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
 import type { Deck } from './types/deck';

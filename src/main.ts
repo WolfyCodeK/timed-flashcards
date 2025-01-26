@@ -4,11 +4,11 @@ import { checkUpdate, installUpdate, onUpdaterEvent } from "@tauri-apps/api/upda
 import { relaunch } from "@tauri-apps/api/process";
 import { confirm, message } from "@tauri-apps/api/dialog";
 import './components/toolbar.css'
-import { appWindow, WebviewWindow } from '@tauri-apps/api/window';
+import { WebviewWindow } from '@tauri-apps/api/window';
 import { listen } from '@tauri-apps/api/event';
 import { DeckRunner } from './services/deckRunner';
-import { importDeckFromFile, saveDeckToFile, decks, createNewDeck, deleteDeck } from './store/deckStore';
-import type { Deck, DeckRunnerSettings } from './types/deck';
+import { importDeckFromFile, decks, createNewDeck, deleteDeck } from './store/deckStore';
+import type { Deck } from './types/deck';
 import { NewDeckDialog } from './components/NewDeckDialog';
 
 const SETTINGS_FILE = "settings.json";
@@ -245,36 +245,6 @@ async function renderDecks(deckList: HTMLUListElement, currentDecks: Deck[]) {
         const deckName = document.createElement('span');
         deckName.className = 'deck-name';
         deckName.textContent = deck.name;
-        deckName.style.cursor = 'pointer';
-        deckName.addEventListener('click', async () => {
-            console.log('Opening editor for deck:', deck);
-            const editorWindow = new WebviewWindow('deck-editor', {
-                url: 'src/views/deck-editor.html',
-                title: 'Edit Deck',
-                width: 800,
-                height: 600,
-                center: true,
-            });
-
-            // Wait for the window to be ready AND for its JavaScript to initialize
-            await editorWindow.once('tauri://created', () => {
-                console.log('Editor window created, waiting to send deck...');
-                setTimeout(async () => {
-                    try {
-                        // Log the deck structure before sending
-                        console.log('Attempting to send deck to editor:', {
-                            id: deck.id,
-                            name: deck.name,
-                            flashcards: deck.flashcards // Ensure this is populated
-                        });
-                        await editorWindow.emit('edit-deck', { deck });
-                        console.log('Successfully sent deck to editor');
-                    } catch (error) {
-                        console.error('Error sending deck to editor:', error);
-                    }
-                }, 500);
-            });
-        });
 
         const itemCount = document.createElement('span');
         itemCount.className = 'deck-item-count';
@@ -283,6 +253,23 @@ async function renderDecks(deckList: HTMLUListElement, currentDecks: Deck[]) {
         listItem.appendChild(checkbox);
         listItem.appendChild(deckName);
         listItem.appendChild(itemCount);
+
+        // Add click handler to the entire list item
+        listItem.addEventListener('click', async (event) => {
+            // If clicking the checkbox, don't open editor
+            if (event.target === checkbox) {
+                return;
+            }
+
+            console.log('Opening editor for deck:', deck);
+            const editorWindow = new WebviewWindow('deck-editor', {
+                url: `src/views/deck-editor.html?id=${deck.id}`,
+                title: 'Edit Deck',
+                width: 800,
+                height: 600,
+                center: true,
+            });
+        });
 
         deckList.appendChild(listItem);
     });

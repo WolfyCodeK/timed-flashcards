@@ -1,7 +1,6 @@
 import { WebviewWindow } from '@tauri-apps/api/window';
 import { decks } from './store/deckStore';
-import type { Deck, DeckRunnerSettings } from './types/deck';
-import { DeckRunner } from './services/deckRunner';
+import type { Deck } from './types/deck';
 
 let currentDeck: Deck | null = null;
 

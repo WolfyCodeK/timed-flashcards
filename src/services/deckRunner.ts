@@ -1,5 +1,4 @@
-import { appWindow, WebviewWindow, getAll } from '@tauri-apps/api/window';
-import { getMatches } from '@tauri-apps/api/cli';
+import { WebviewWindow, getAll } from '@tauri-apps/api/window';
 import { invoke } from '@tauri-apps/api/tauri';
 import type { Deck, DeckRunnerSettings } from '../types/deck';
 

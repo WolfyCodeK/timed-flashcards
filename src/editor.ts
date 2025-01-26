@@ -1,4 +1,3 @@
-import { WebviewWindow } from '@tauri-apps/api/window';
 import { decks, updateDeck } from './store/deckStore';
 import type { Deck, Card } from './types/deck';
 import { v4 as uuidv4 } from 'uuid';
@@ -132,35 +131,70 @@ function createSortControls(): HTMLDivElement {
 }
 
 function renderCards() {
-    console.log('Rendering cards:', currentDeck?.cards);
-    const cardList = document.getElementById('card-list');
-    if (!cardList || !currentDeck) {
-        console.error('cardList or currentDeck is null');
-        return;
-    }
+    if (!currentDeck) return;
 
-    // Clear the existing content
+    const cardList = document.getElementById('card-list');
+    if (!cardList) return;
+
     cardList.innerHTML = '';
 
-    // Add sort controls at the top
-    const sortControls = createSortControls();
-    cardList.appendChild(sortControls);
-
-    // Create a document fragment for better performance
-    const fragment = document.createDocumentFragment();
-    
-    // Add cards to the fragment
     currentDeck.cards.forEach((card, index) => {
-        const cardElement = createCardElement(card, index);
-        fragment.appendChild(cardElement);
-    });
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card-item-editor';
+        
+        const textarea = document.createElement('textarea');
+        textarea.className = 'card-content';
+        textarea.value = card.content;
+        textarea.placeholder = 'Enter card content...';
+        
+        textarea.addEventListener('input', () => {
+            if (currentDeck) {
+                currentDeck.cards[index].content = textarea.value;
+                hasUnsavedChanges = true;
+            }
+        });
+        
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'card-actions';
+        
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'card-action-button delete';
+        deleteButton.textContent = '×';
+        
+        // Update delete functionality with confirmation
+        deleteButton.addEventListener('click', async () => {
+            if (!currentDeck) return;
 
-    // Append all cards at once
-    cardList.appendChild(fragment);
+            const { confirm } = await import('@tauri-apps/api/dialog');
+            const cardPreview = card.content.length > 50 
+                ? card.content.substring(0, 50) + '...' 
+                : card.content || '(empty card)';
+                
+            const confirmed = await confirm(
+                `Are you sure you want to delete this card?\n\n"${cardPreview}"`,
+                { 
+                    title: 'Delete Card',
+                    type: 'warning'
+                }
+            );
+
+            if (confirmed) {
+                currentDeck.cards.splice(index, 1);
+                hasUnsavedChanges = true;
+                renderCards();
+            }
+        });
+        
+        actionsDiv.appendChild(deleteButton);
+        cardElement.appendChild(textarea);
+        cardElement.appendChild(actionsDiv);
+        
+        cardList.appendChild(cardElement);
+    });
 }
 
-async function initializeEditor() {
-    console.log('Initializing editor');
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('Editor DOM loaded');
     
     // Wait for deck store to initialize
     await decks.waitForInitialization();
@@ -174,18 +208,15 @@ async function initializeEditor() {
         return;
     }
 
+    // Load deck data
     const allDecks = await decks.get();
-    console.log('All decks:', allDecks);
+    currentDeck = allDecks.find(d => d.id === deckId) || null;
     
-    const foundDeck = allDecks.find(d => d.id === deckId);
-    console.log('Found deck:', foundDeck);
-    
-    if (!foundDeck) {
+    if (!currentDeck) {
         console.error('Deck not found');
         return;
     }
 
-    currentDeck = JSON.parse(JSON.stringify(foundDeck));
     hasUnsavedChanges = false;  // Reset when loading a new deck
     console.log('Current deck loaded:', currentDeck);
 
@@ -236,33 +267,10 @@ async function initializeEditor() {
         console.log('Save button clicked');
         if (currentDeck) {
             try {
-                console.log('Current deck before save:', JSON.stringify(currentDeck, null, 2));
-                
-                const processedCards = currentDeck.cards.map(card => ({
-                    id: card.id,
-                    content: card.content,
-                    created: card.created,
-                    lastShown: card.lastShown ? new Date(card.lastShown).toISOString() : undefined
-                }));
-
-                const deckToSave: Deck = {
-                    ...currentDeck,
-                    cards: processedCards,
-                    lastModified: new Date().toISOString()
-                };
-
-                console.log('Deck to save:', JSON.stringify(deckToSave, null, 2));
-                
-                // Wait for the update to complete
-                await updateDeck(deckToSave);
-                
-                // Force an update event
-                await emit('deck-updated', deckToSave);
-                
+                await updateDeck(currentDeck);
                 hasUnsavedChanges = false;
                 console.log('Deck saved successfully');
                 
-                // Use appWindow for closing after save
                 const { appWindow } = await import('@tauri-apps/api/window');
                 await appWindow.close();
             } catch (error) {
@@ -273,49 +281,64 @@ async function initializeEditor() {
                     type: 'error'
                 });
             }
-        } else {
-            console.error('Cannot save: currentDeck is null');
         }
     });
 
-    // Initial render
-    console.log('Initial render');
-    renderCards();
-}
+    // Delete deck button
+    const deleteButton = document.getElementById('delete-deck');
+    if (!deleteButton) {
+        console.error('Delete button not found');
+        return;
+    }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOM Content Loaded');
-    
-    // Listen for the close-requested event from Rust
+    deleteButton.addEventListener('click', async () => {
+        if (!currentDeck) return;
+
+        const { confirm } = await import('@tauri-apps/api/dialog');
+        const confirmed = await confirm(
+            `Are you sure you want to delete the deck "${currentDeck.name}"?\nThis action cannot be undone.`,
+            { title: 'Delete Deck', type: 'warning' }
+        );
+
+        if (confirmed) {
+            try {
+                const { deleteDeck } = await import('./store/deckStore');
+                await deleteDeck(currentDeck.id);
+                
+                // Close the window after successful deletion
+                const { appWindow } = await import('@tauri-apps/api/window');
+                await appWindow.close();
+            } catch (error) {
+                console.error('Error deleting deck:', error);
+                const { message } = await import('@tauri-apps/api/dialog');
+                await message('Failed to delete deck. Please try again.', {
+                    title: 'Delete Error',
+                    type: 'error'
+                });
+            }
+        }
+    });
+
+    // Listen for close requests
     await listen<void>('close-requested', async () => {
-        console.log('Close requested, hasUnsavedChanges:', hasUnsavedChanges);
-        
+        console.log('Close requested, checking for unsaved changes');
         if (hasUnsavedChanges) {
             const { confirm } = await import('@tauri-apps/api/dialog');
+            const confirmed = await confirm(
+                'You have unsaved changes. Are you sure you want to quit?',
+                { title: 'Unsaved Changes', type: 'warning' }
+            );
             
-            try {
-                const confirmed = await confirm(
-                    'You have unsaved changes. Are you sure you want to quit?',
-                    {
-                        title: 'Unsaved Changes',
-                        type: 'warning',
-                    }
-                );
-                
-                if (confirmed) {
-                    const { appWindow } = await import('@tauri-apps/api/window');
-                    await appWindow.close();
-                }
-            } catch (error) {
-                console.error('Error showing confirmation dialog:', error);
+            const { appWindow } = await import('@tauri-apps/api/window');
+            if (confirmed) {
+                await appWindow.close();
             }
         } else {
             const { appWindow } = await import('@tauri-apps/api/window');
             await appWindow.close();
         }
     });
-    
-    initializeEditor().catch(error => {
-        console.error('Error initializing editor:', error);
-    });
+
+    // Initial render
+    renderCards();
 }); 

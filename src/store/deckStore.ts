@@ -1,5 +1,5 @@
 import { Store } from './store';
-import type { Deck, Card } from '../types/deck';
+import type { Deck } from '../types/deck';
 import { readTextFile, writeTextFile, BaseDirectory, createDir, exists } from '@tauri-apps/api/fs';
 import { open, save } from '@tauri-apps/api/dialog';
 import { v4 as uuidv4 } from 'uuid';
